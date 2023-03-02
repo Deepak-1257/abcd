@@ -1,0 +1,120 @@
+<% layout('/layouts/boilerplate') %>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="/stylesheet/inbox.css">
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="/emojipicker/lib/css/emoji.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- 
+<script src="/emojipicker/lib/js/config.js"></script>
+<script src="/emojipicker/lib/js/util.js"></script>
+<script src="/emojipicker/lib/js/jquery.emojiarea.js"></script>
+<script src="/emojipicker/lib/js/emoji-picker.js"></script> -->
+
+
+<input type="hidden" value="<%= receiverID %>" id="receiverID" name="receiverID" >
+<input type="hidden" value="<%= userID %>" id="userID" name="userID" >
+<input type="hidden" value="<%= chatID %>" id="chatID" name="chatID" >
+<div id="chat-container">
+    <div id="search-container">
+        <a href="/yourdalaal/inbox" >
+            <header><strong>Inbox</strong></header>
+        </a>
+    </div>
+    
+    <div id="conversation-list">
+        <% if(conversationList.length==0){ %> 
+            <div class="text-muted justify-content-center align-middle" id="" style="margin-top: 50px; padding:40px; padding-top: 100px;">
+                <span class="align-middle justify-content-center "><strong>No Chat Available.</strong></span>
+            </div>
+        <% } %> 
+        <% for(let item of conversationList){ %> 
+                <a href="/yourdalaal/inbox/<%=item.receiverId%>" data-receiver-id="<%=item.receiverId%>">
+                <div class="conversation" data-receiver-id="<%=item.receiverId%>">
+                    
+                    <img src='<%=item.profileImage%>'/>
+                    <div class="title-text">
+                        <span class="title-text-status">&#128994</span>
+                        <%=item.receiverName%>
+                    </div>
+                    <div class="created-date"><%=item.updatedAt%></div>
+                    <div class="conversation-message">
+                        <%=item.recent_message%>
+                    </div>
+                    <% if(item.unReadCount>0){ %> 
+                        <div class="unReadCount-message"><%=item.unReadCount%></div>
+                        <% } %> 
+                    </div>
+                </a>
+        <% } %> 
+    </div>
+
+    
+
+    <% if(receiverID ===''){ %> 
+            <div class="text-muted justify-content-center" id="chat-message-list" style="margin: 30px;">
+                <p><strong>Select a Chat to Start Messaging</strong></p>
+            </div>
+    <% }else{ %> 
+            <div id="chat-title">
+                <a href="/yourdalaal/user/<%=receiver.username%>">
+                    <span>
+                        <%=receiver.username%>
+                    </span>
+                </a>
+                
+                <div id="online-status">
+                    <p id="online-status-text">offline</p>
+                </div>
+            </div>
+            <div id="chat-message-list">
+                <% var date="-1" %> 
+                <% for(let item of conversation){ %> 
+                    <% if(item.message_date!=""&&date!=item.message_date){ date=item.message_date; %> 
+                        <div id="chat-message-list-date">
+                            <span><%= item.message_date %></span>
+                        </div>
+                        
+                    <% } %> 
+                    <div class="message-row <%=item.message_class%>" data-message-id="<%= item.message_id %>">
+                        <div class="message-content" >
+                            <% var userProfileImage = (receiver.profileImage.url) ? receiver.profileImage.url : 'https:img.icons8.com/metro/26/000000/user-male.png';
+                            if(item.message_class=="other-message"){%>
+                                <img src= <%=userProfileImage%> alt="<%=receiver.username%>" />
+                            <%} %> 
+                            <div class="message-text"><%=item.message_text%></div>
+                            <div class="message-status">
+                                <div class="message-time"><%=item.message_time%></div>
+                                <%if(item.message_class=='you-message'){%>
+                                    <%if(item.isRead){%>
+                                        <div class="read-reciept" >&#10003</div>
+                                    <%}else{%>
+                                        <div class="read-reciept" ></div>
+                                    <%}%>
+                                <%}%>
+                            </div>
+                            
+                        </div>
+                    </div>
+                <% } %> 
+            </div>
+                <div id="chat-form" >                    
+                    <div class="lead emoji-picker-container" id="input-container">
+                        
+                        <input type="textbox" data-emoji-input="unicode" class="form-control" id="message-text" placeholder="Type a message"
+                            data-emojiable="true"></input>
+                    </div>
+                    <button id="send_message">
+                        <img src="https://img.icons8.com/fluent/48/000000/filled-sent.png" alt="Add Attachment" />
+                    </button>
+                </div>
+                
+    <% } %> 
+</div>
+
+
+
+<script src="/javascript/inbox.js"></script>
+

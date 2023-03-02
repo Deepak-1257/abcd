@@ -1,0 +1,67 @@
+<% layout('/layouts/boilerplate') %>
+<style>
+    /* https://www.w3schools.com/howto/howto_css_thumbnail.asp */
+    .image {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        width: 200px;
+        max-height: 1000px;
+    }
+
+</style>
+<div class="row">
+    <div class="col-6 mb-3">
+
+        <div id="carouselControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <% product.description.images.forEach((img,i)=>{%>
+                    <div class="carousel-item <%= i===0?'active':'' %>">
+                        <img src="<%=img.url %>" class="d-block w-100 image" alt="">
+                    </div>
+                <% }) %> 
+            </div>
+            <% if(product.description.images.length>1){ %> 
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            <% } %> 
+        </div>
+    </div>
+
+    <div class="col-6 mb-3">
+        <div>
+            <h2><%= product.name %> </h2>
+            <h6 class="mb-2 text-muted">
+                by
+                <a href="/yourdalaal/user/<%=product.owner.username %> "><%=product.owner.username %></a>
+            </h6>
+            <hr>
+            <p>category: <%=product.description.category %> </p>
+            <p><%=product.description.desc %> </p>
+            <p>Price: <%=product.description.price %> Rs. </p>
+        </div>
+        
+        <% if(currentUser&&product.owner.equals(currentUser._id)){ %>
+            
+            <a class="btn btn-primary" href="/yourdalaal/<%= product._id %>/edit">Edit Product</a>
+            <form action="/yourdalaal/<%= product._id %>?_method=DELETE " method="post" class="d-inline">
+                <button class="btn btn-danger">Delete Product</button>
+            </form>
+
+        <% } %> 
+        <% if(1){ %>
+            
+            <a class="btn btn-primary" href="/yourdalaal/inbox/<%= product.owner._id %>">Contact Seller</a>
+            <!-- -->
+
+        <% } %> 
+        <!-- <a href="/yourdalaal">YourDalaal</a> -->
+    </div>
+
+</div>

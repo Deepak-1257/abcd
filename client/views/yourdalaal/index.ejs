@@ -1,0 +1,52 @@
+<% layout('/layouts/boilerplate') %>
+<style>
+    /* https://www.w3schools.com/howto/howto_css_thumbnail.asp */
+    .image {
+        
+        padding: 5px;
+        max-width: 300px;
+        max-height: 600px;
+        
+    }
+    .top-image{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    /* .products-container{
+        display: flex;
+        flex-direction: row;
+    }
+    .product{
+        min-width: 100px;
+    } */
+</style>
+
+    <div class="container-fluid m-2">
+
+        <div class="col-12 align-self-center">
+    
+            <div class="row justify-content-center">
+        <!-- <div class="products-container"> -->
+            
+            <% for(let product of products){ %>            
+                <div class="product card m-2 " style="width: 18rem;">
+                <!-- <div class="product card m-2 " > -->
+                    <div class="top-image">
+                        <img src="<%= (product.description.images.length>0)? product.description.images[0].url:'https://i.stack.imgur.com/y9DpT.jpg' %>" class="card-img-top image" alt="...">
+                    </div>
+                    
+                    <div class="card-body">
+                        <h5 class="card-title"><%= product.name %></h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><%= product.description.price %> Rs.</h6>
+                        <p class="card-text"><%= product.description.desc.substring(0,Math.min(100,product.description.desc.length)) %>..</p>
+                        <a href="/yourdalaal/<%= product._id %>" class="btn btn-primary">view product</a>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+        </div>
+    </div> 
+
+        <!-- </div> -->
